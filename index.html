@@ -1,1 +1,151 @@
-<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Ramser Sites of India</title><link rel="stylesheet" href="leaflet.css"><style>body,html{margin:0;padding:0}#map{width:100%;height:100vh;position:relative}#pointCountContainer{position:absolute;top:10px;right:10px;background-color:#fff;padding:5px;border-radius:4px;box-shadow:0 2px 5px rgba(0,0,0,.1);z-index:9999}.leaflet-bottom.leaflet-left{width:100%}.leaflet-control-container .leaflet-timeline-controls{position:absolute;box-sizing:border-box;width:100%;margin:0;margin-bottom:15px}.leaflet-control-container .leaflet-timeline-controls .leaflet-timeline-bar{border-radius:15px}@media (max-width:768px){#pointCountContainer{top:60px;right:10px}}</style></head><body><div id="map"></div><div id="pointCountContainer">Total Ramsar Sites:<span id="pointCount">0</span></div><script src="leaflet.js"></script><script src="leaflet.timeline.js"></script><script>function getColorFor(e){for(var t=0,o=0;o<e.length;o++)t=e.charCodeAt(o)+((t<<5)-t);return"rgb("+(t>>24&255)+","+(t>>16&255)+","+(t>>8&255)+")"}var timeline,timelineControl,osmUrl="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",osmAttrib='Map data &copy; <a href="https://openstreetmap.org">OpenStreetMap</a> prepared by Hiren',osm=L.tileLayer(osmUrl,{maxZoom:18,attribution:osmAttrib}),map=L.map("map",{layers:[osm],center:[20.5937,78.9629],zoom:4.8});function onLoadData(e){timeline=L.timeline(e,{pointToLayer:function(e,t){return L.circleMarker(t,{radius:5,fillColor:getColorFor(e.properties.name),color:"#000",weight:1,opacity:1,fillOpacity:.8})},onEachFeature:function(e,t){var o="<strong>Name:</strong> "+e.properties.name+"<br/><strong>Area (HA):</strong> "+e.properties.Area__HA_+"<br/><strong>Date of Designated:</strong> "+e.properties.start+"<br/><strong>State:</strong> "+e.properties.State;t.bindTooltip(o,{permanent:!1,direction:"top",className:"tooltip"})}});var o=0,r=document.getElementById("pointCount");timeline.on("change",function(e){var t=e.target.getLayers();o=t.length,r.innerText=o}),timelineControl=L.timelineSliderControl({formatOutput:function(e){return new Date(e).toLocaleDateString()},enableKeyboardControls:!0}),timeline.addTo(map),timelineControl.addTo(map),timelineControl.addTimelines(timeline)}function toggleTimeline(){timeline?map.hasLayer(timeline)?(map.removeLayer(timeline),timelineControl.remove()):(timeline.addTo(map),timelineControl.addTo(map),timelineControl.addTimelines(timeline)):alert("Timeline not loaded yet")}</script><script src="borders-parsed.jsonp"></script></body></html>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ramser Sites of India</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="leaflet.css" />
+
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+      }
+      #map {
+        width: 100%;
+        height: 100vh;
+        position: relative;
+      }
+      #pointCountContainer {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background-color: white;
+        padding: 5px;
+        border-radius: 4px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        z-index: 9999;
+      }
+ 
+      .leaflet-bottom.leaflet-left {
+        width: 100%;
+      }
+      .leaflet-control-container .leaflet-timeline-controls {
+        position: absolute;
+        box-sizing: border-box;
+        width: 100%;
+        margin: 0;
+        margin-bottom: 15px;
+      }
+      
+      .leaflet-control-container .leaflet-timeline-controls .leaflet-timeline-bar {
+        border-radius: 15px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <div id="pointCountContainer" class="bg-light p-2 rounded shadow">
+      Total Ramsar Sites: <span id="pointCount">0</span>
+    </div>
+
+    <script src="leaflet.js"></script>
+    <script src="leaflet.timeline.js"></script>
+     <script>
+      function getColorFor(str) {
+        // java String#hashCode
+        var hash = 0;
+        for (var i = 0; i < str.length; i++) {
+          hash = str.charCodeAt(i) + ((hash << 5) - hash);
+        }
+        var red = (hash >> 24) & 0xff;
+        var grn = (hash >> 16) & 0xff;
+        var blu = (hash >> 8) & 0xff;
+        return "rgb(" + red + "," + grn + "," + blu + ")";
+      }
+
+      var osmUrl = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
+      var osmAttrib =
+        'Map data &copy; <a href="https://openstreetmap.org">OpenStreetMap</a> prepared by Hiren';
+      var osm = L.tileLayer(osmUrl, { maxZoom: 18, attribution: osmAttrib });
+
+      var map = L.map("map", {
+        layers: [osm],
+        center: [20.5937, 78.9629],
+        zoom: 4.8,
+
+      });
+
+      var timeline;
+      var timelineControl;
+
+        function onLoadData(data) {
+        timeline = L.timeline(data, {
+          pointToLayer: function (feature, latlng) {
+            return L.circleMarker(latlng, {
+              radius: 5,
+              fillColor: getColorFor(feature.properties.name),
+              color: "#000",
+              weight: 1,
+              opacity: 1,
+              fillOpacity: 0.8,
+            });
+          },
+          onEachFeature: function (feature, layer) {
+            var tooltipContent =
+              "<strong>Name:</strong> " + feature.properties.name + "<br/>" +
+              "<strong>Area (HA):</strong> " + feature.properties.Area__HA_ + "<br/>" +
+              "<strong>Date of Designated:</strong> " + feature.properties.start + "<br/>" +
+              "<strong>State:</strong> " + feature.properties.State;
+
+            layer.bindTooltip(tooltipContent, {
+              permanent: false,
+              direction: "top",
+              className: "tooltip",
+            });
+          },
+        });
+
+        var pointCount = 0; // Variable to hold the point count
+        var pointCountElement = document.getElementById("pointCount"); // Get the point count element
+
+        timeline.on("change", function (event) {
+          var layers = event.target.getLayers();
+          pointCount = layers.length; // Update the point count based on the number of layers
+          pointCountElement.innerText = pointCount; // Update the point count element
+        });
+
+        timelineControl = L.timelineSliderControl({
+          formatOutput: function (date) {
+            return new Date(date).toLocaleDateString();
+          },
+          enableKeyboardControls: true,
+        });
+
+        timeline.addTo(map);
+        timelineControl.addTo(map);
+        timelineControl.addTimelines(timeline);
+      }
+
+
+      function toggleTimeline() {
+        if (timeline) {
+          if (map.hasLayer(timeline)) {
+            map.removeLayer(timeline);
+            timelineControl.remove();
+          } else {
+            timeline.addTo(map);
+            timelineControl.addTo(map);
+            timelineControl.addTimelines(timeline);
+          }
+        } else {
+          alert("Timeline not loaded yet");
+        }
+      }
+    </script>
+    <script src="borders-parsed.jsonp"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
+
