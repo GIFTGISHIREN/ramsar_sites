@@ -14,7 +14,7 @@
       }
       #map {
         width: 100%;
-        height: 100vh;
+        height: calc(100vh - 40px); /* Adjusted height to accommodate the timeline */
         position: relative;
       }
       #pointCountContainer {
@@ -31,12 +31,16 @@
       .leaflet-bottom.leaflet-left {
         width: 100%;
       }
-			  @media (max-width: 768px) {
-		  .leaflet-control-container .leaflet-timeline-controls {
-			bottom: 0;
-			margin-bottom: 0;
-		  }
-		}
+      
+      @media (max-width: 768px) {
+        .leaflet-control-container .leaflet-timeline-controls {
+          bottom: 40px; /* Adjusted bottom value to accommodate the timeline */
+          margin-bottom: 0;
+        }
+        #pointCountContainer {
+          top: 50px; /* Adjusted top value to avoid overlapping with the timeline */
+        }
+      }
 
       .leaflet-control-container .leaflet-timeline-controls {
         position: absolute;
@@ -59,7 +63,7 @@
 
     <script src="leaflet.js"></script>
     <script src="leaflet.timeline.js"></script>
-     <script>
+       <script>
       function getColorFor(str) {
         // java String#hashCode
         var hash = 0;
